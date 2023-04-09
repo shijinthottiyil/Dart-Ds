@@ -1,11 +1,11 @@
 void printNum(int n) {
-  if (n == 0) {
+  if (n == 6) {
     return;
   }
   print(n);
-  printNum(n - 1);
+  printNum(n + 1);
 }
 
 void main() {
-  printNum(5);
+  printNum(1);
 }
