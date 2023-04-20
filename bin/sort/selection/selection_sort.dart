@@ -1,6 +1,7 @@
 void main() {
-  List<int> numbers = [7, 8, 3, 1, 2];
+  List<int> numbers = [7, 4, 10, 8, 3, 1];
   int n = numbers.length;
+  print("array before sorting: $numbers");
   for (int i = 0; i < n - 1; i++) {
     int min = i;
     for (int j = i + 1; j < n; j++) {
@@ -8,9 +9,11 @@ void main() {
         min = j;
       }
     }
-    int temp = numbers[min];
-    numbers[min] = numbers[i];
-    numbers[i] = temp;
+    if (min != i) {
+      int temp = numbers[i];
+      numbers[i] = numbers[min];
+      numbers[min] = temp;
+    }
   }
-  print(numbers);
+  print("array after sorting: $numbers");
 }
