@@ -10,6 +10,7 @@ void mergeSort(List<int> arr, int low, int high) {
 void merge(List<int> arr, int low, int mid, int high) {
   int leftSize = mid - low + 1;
   int rightSize = high - mid;
+
   List<int> leftArr = List.filled(leftSize, 0);
   List<int> rightArr = List.filled(rightSize, 0);
 
@@ -26,14 +27,15 @@ void merge(List<int> arr, int low, int mid, int high) {
   int k = low;
 
   while (i < leftSize && j < rightSize) {
-    if (leftArr[i] <= rightArr[j]) {
+    if (leftArr[i] < rightArr[j]) {
       arr[k] = leftArr[i];
       i++;
+      k++;
     } else {
       arr[k] = rightArr[j];
       j++;
+      k++;
     }
-    k++;
   }
 
   while (i < leftSize) {
@@ -41,7 +43,6 @@ void merge(List<int> arr, int low, int mid, int high) {
     i++;
     k++;
   }
-
   while (j < rightSize) {
     arr[k] = rightArr[j];
     j++;
@@ -50,9 +51,7 @@ void merge(List<int> arr, int low, int mid, int high) {
 }
 
 void main() {
-  List<int> arr = [64, 34, 25, 12, 22, 11, 90];
-  print("Unsorted array: $arr");
-
-  mergeSort(arr, 0, arr.length - 1);
-  print("Sorted array: $arr");
+  List<int> numbers = [5, 4, 3, 2, 1];
+  mergeSort(numbers, 0, numbers.length - 1);
+  print(numbers);
 }
