@@ -1,58 +1,118 @@
-void mergeSort(List<int> arr, int low, int high) {
-  if (low < high) {
-    int mid = (low + high) ~/ 2;
-    mergeSort(arr, low, mid);
-    mergeSort(arr, mid + 1, high);
-    merge(arr, low, mid, high);
-  }
+class Node {
+  int key;
+  Node? left, right;
+
+  Node(this.key);
+
+  // Node(this.key) {
+  //   // left = null;
+  //   // right = null;
+  // }
 }
 
-void merge(List<int> arr, int low, int mid, int high) {
-  int leftSize = mid - low + 1;
-  int rightSize = high - mid;
-  List<int> leftArr = List.filled(leftSize, 0);
-  List<int> rightArr = List.filled(rightSize, 0);
+class BinarySearchTree {
+  Node? root;
 
-  for (int i = 0; i < leftSize; i++) {
-    leftArr[i] = arr[low + i];
+  // BinarySearchTree() {
+  //   root = null;
+  // }
+
+  void insert(int key) {
+    root = _insertRec(root, key);
   }
 
-  for (int j = 0; j < rightSize; j++) {
-    rightArr[j] = arr[mid + 1 + j];
-  }
-
-  int i = 0;
-  int j = 0;
-  int k = low;
-
-  while (i < leftSize && j < rightSize) {
-    if (leftArr[i] <= rightArr[j]) {
-      arr[k] = leftArr[i];
-      i++;
-    } else {
-      arr[k] = rightArr[j];
-      j++;
+  Node? _insertRec(Node? root, int key) {
+    if (root == null) {
+      root = Node(key);
+      return root;
     }
-    k++;
+
+    if (key < root.key) {
+      root.left = _insertRec(root.left, key);
+    } else if (key > root.key) {
+      root.right = _insertRec(root.right, key);
+    }
+
+    return root;
   }
 
-  while (i < leftSize) {
-    arr[k] = leftArr[i];
-    i++;
-    k++;
+  void delete(int key) {
+    root = _deleteRec(root, key);
   }
 
-  while (j < rightSize) {
-    arr[k] = rightArr[j];
-    j++;
-    k++;
+  Node? _deleteRec(Node? root, int key) {
+    if (root == null) {
+      return root;
+    }
+
+    if (key < root.key) {
+      root.left = _deleteRec(root.left, key);
+    } else if (key > root.key) {
+      root.right = _deleteRec(root.right, key);
+    } else {
+      if (root.left == null) {
+        return root.right;
+      } else if (root.right == null) {
+        return root.left;
+      }
+
+      root.key = _minValue(root.right!);
+
+      root.right = _deleteRec(root.right, root.key);
+    }
+
+    return root;
+  }
+
+  int _minValue(Node root) {
+    int minValue = root.key;
+    while (root.left != null) {
+      minValue = root.left!.key;
+      root = root.left!;
+    }
+
+    return minValue;
+  }
+
+  void inorder() {
+    _inorderRec(root);
+  }
+
+  void _inorderRec(Node? root) {
+    if (root != null) {
+      _inorderRec(root.left);
+      print(root.key);
+      _inorderRec(root.right);
+    }
   }
 }
 
 void main() {
-  List<int> arr = [64, 34, 25, 12, 22, 11, 90];
-  print("Unsorted array: $arr");
+  var tree = BinarySearchTree();
 
-  mergeSort(arr, 0, arr.length - 1);
-  print("Sorted array: $arr");
+  tree.insert(50);
+  tree.insert(30);
+  tree.insert(20);
+  tree.insert(40);
+  tree.insert(70);
+  tree.insert(60);
+  tree.insert(80);
+
+  print("Inorder traversal of the given tree:");
+  tree.inorder();
+
+  print("\nDelete 20");
+  tree.delete(20);
+  print("Inorder traversal of the modified tree:");
+  tree.inorder();
+
+  print("\nDelete 30");
+  tree.delete(30);
+  print("Inorder traversal of the modified tree:");
+  tree.inorder();
+
+  print("\nDelete 50");
+  tree.delete(50);
+  print("Inorder traversal of the modified tree:");
+  tree.inorder();
 }

@@ -10,28 +10,27 @@ void main() {
 }
 
 void sort(List<int> numbers, int low, int high) {
-  if (low >= high) {
-    return;
+  if (low < high) {
+    int start = low;
+    int end = high;
+    int mid = start + (end - start) ~/ 2;
+    int pivot = numbers[mid];
+    while (start <= end) {
+      while (numbers[start] < pivot) {
+        start++;
+      }
+      while (numbers[end] > pivot) {
+        end--;
+      }
+      if (start <= end) {
+        int temp = numbers[start];
+        numbers[start] = numbers[end];
+        numbers[end] = temp;
+        start++;
+        end--;
+      }
+    }
+    sort(numbers, low, end);
+    sort(numbers, start, high);
   }
-  int start = low;
-  int end = high;
-  int mid = start + (end - start) ~/ 2;
-  int pivot = numbers[mid];
-  while (start <= end) {
-    while (numbers[start] < pivot) {
-      start++;
-    }
-    while (numbers[end] > pivot) {
-      end--;
-    }
-    if (start <= end) {
-      int temp = numbers[start];
-      numbers[start] = numbers[end];
-      numbers[end] = temp;
-      start++;
-      end--;
-    }
-  }
-  sort(numbers, low, end);
-  sort(numbers, start, high);
 }
