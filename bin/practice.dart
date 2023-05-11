@@ -1,118 +1,36 @@
-class Node {
-  int key;
-  Node? left, right;
+void maxHeapify(List<int> numbers, int size, int i) {
+  int largest = i;
+  int left = 2 * i + 1;
+  int right = 2 * i + 2;
 
-  Node(this.key);
-
-  // Node(this.key) {
-  //   // left = null;
-  //   // right = null;
-  // }
+  if (left < size && numbers[left] < numbers[largest]) {
+    largest = left;
+  }
+  if (right < size && numbers[right] < numbers[largest]) {
+    largest = right;
+  }
+  if (largest != i) {
+    int temp = numbers[largest];
+    numbers[largest] = numbers[i];
+    numbers[i] = temp;
+    maxHeapify(numbers, size, largest);
+  }
 }
 
-class BinarySearchTree {
-  Node? root;
-
-  // BinarySearchTree() {
-  //   root = null;
-  // }
-
-  void insert(int key) {
-    root = _insertRec(root, key);
+void heapsort(List<int> numbers, int size) {
+  for (int i = (size ~/ 2) - 1; i >= 0; i--) {
+    maxHeapify(numbers, size, i);
   }
-
-  Node? _insertRec(Node? root, int key) {
-    if (root == null) {
-      root = Node(key);
-      return root;
-    }
-
-    if (key < root.key) {
-      root.left = _insertRec(root.left, key);
-    } else if (key > root.key) {
-      root.right = _insertRec(root.right, key);
-    }
-
-    return root;
-  }
-
-  void delete(int key) {
-    root = _deleteRec(root, key);
-  }
-
-  Node? _deleteRec(Node? root, int key) {
-    if (root == null) {
-      return root;
-    }
-
-    if (key < root.key) {
-      root.left = _deleteRec(root.left, key);
-    } else if (key > root.key) {
-      root.right = _deleteRec(root.right, key);
-    } else {
-      if (root.left == null) {
-        return root.right;
-      } else if (root.right == null) {
-        return root.left;
-      }
-
-      root.key = _minValue(root.right!);
-
-      root.right = _deleteRec(root.right, root.key);
-    }
-
-    return root;
-  }
-
-  int _minValue(Node root) {
-    int minValue = root.key;
-    while (root.left != null) {
-      minValue = root.left!.key;
-      root = root.left!;
-    }
-
-    return minValue;
-  }
-
-  void inorder() {
-    _inorderRec(root);
-  }
-
-  void _inorderRec(Node? root) {
-    if (root != null) {
-      _inorderRec(root.left);
-      print(root.key);
-      _inorderRec(root.right);
-    }
+  for (int i = size - 1; i >= 1; i--) {
+    int temp = numbers[i];
+    numbers[i] = numbers[0];
+    numbers[0] = temp;
+    maxHeapify(numbers, i, 0);
   }
 }
 
 void main() {
-  var tree = BinarySearchTree();
-
-  tree.insert(50);
-  tree.insert(30);
-  tree.insert(20);
-  tree.insert(40);
-  tree.insert(70);
-  tree.insert(60);
-  tree.insert(80);
-
-  print("Inorder traversal of the given tree:");
-  tree.inorder();
-
-  print("\nDelete 20");
-  tree.delete(20);
-  print("Inorder traversal of the modified tree:");
-  tree.inorder();
-
-  print("\nDelete 30");
-  tree.delete(30);
-  print("Inorder traversal of the modified tree:");
-  tree.inorder();
-
-  print("\nDelete 50");
-  tree.delete(50);
-  print("Inorder traversal of the modified tree:");
-  tree.inorder();
+  List<int> numbers = [10, 5, 12, 4, 9, 11];
+  heapsort(numbers, numbers.length);
+  print(numbers);
 }
